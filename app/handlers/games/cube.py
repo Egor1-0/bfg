@@ -2,6 +2,8 @@ from aiogram import Router, F, Bot
 from aiogram.types import Message
 
 from app.filters import CubeValue, LenInputCube, RateValueCube
+from app.database.queries import increanse
+
 
 cubes_router = Router()
 
@@ -26,6 +28,8 @@ async def uncorrect_input(message: Message):
 async def cube(message: Message, bot: Bot): 
         mes = await bot.send_dice(chat_id=message.chat.id, emoji='🎲')
         if str(mes.dice.value) == message.text.split(' ')[1]:
-            await message.answer("Вы победили")
+            winning = int(message.text.split(' ')[2]) * 2
+            await increanse(winning, message.from_user.id)
+            await message.answer(f"Вы победили. Ваш выигрыш: {winning}")
         else:
             await message.answer("Вы проиграли")
