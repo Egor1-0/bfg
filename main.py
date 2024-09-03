@@ -7,6 +7,7 @@ from aiogram import Bot, Dispatcher
 
 from app.database.session import create_session
 from app.handlers import main_router_
+from app.handlers.games import games_router
 
 load_dotenv()
 
@@ -15,7 +16,7 @@ async def main():
     bot = Bot(token=os.getenv("TOKEN")) 
     dp = Dispatcher()
 
-    dp.include_routers(main_router_)
+    dp.include_routers(main_router_, games_router)
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
