@@ -19,7 +19,7 @@ class CubeValue(BaseFilter):
         return False
         
 
-class RateValue(BaseFilter):
+class RateValueCube(BaseFilter):
     async def __call__(self, message: Message):  
         input_data = message.text.lower().split(' ')
         try:

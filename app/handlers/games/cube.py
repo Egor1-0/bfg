@@ -1,7 +1,7 @@
 from aiogram import Router, F, Bot
 from aiogram.types import Message
 
-from app.filters import CubeValue, LenInputCube, RateValue
+from app.filters import CubeValue, LenInputCube, RateValueCube
 
 cubes_router = Router()
 
@@ -17,12 +17,12 @@ async def uncorrect_input(message: Message):
     await message.answer('Цифра кубика должна быть целым числом от 1 до 6')
 
 
-@cubes_router.message(~RateValue())
+@cubes_router.message(~RateValueCube())
 async def uncorrect_input(message: Message):
     await message.answer('Ставка должна быть целым числом от 10')
 
 
-@cubes_router.message(CubeValue(), LenInputCube(), RateValue())
+@cubes_router.message(CubeValue(), LenInputCube(), RateValueCube())
 async def cube(message: Message, bot: Bot): 
         mes = await bot.send_dice(chat_id=message.chat.id, emoji='🎲')
         if str(mes.dice.value) == message.text.split(' ')[1]:
