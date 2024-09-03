@@ -17,3 +17,15 @@ async def start(message: Message):
 @main_router.message(F.text.lower() == "помощь")
 async def help(message: Message):
     await message.answer("Текст помощи")
+
+@main_router.message(Command("profile"))
+@main_router.message(F.text.lower() == "профиль")
+async def help(message: Message):
+    profile = await get_user(message.from_user.id)
+    await message.answer(f"""
+id: {profile.id} \n
+Статус: {profile.status} \n
+Денег: {profile.money} \n
+Игр сыграно: {profile.games_played} \n
+Дата регистрации: {profile.registered} \n
+                         """)
