@@ -1,7 +1,7 @@
 import enum
 from datetime import datetime
 
-from sqlalchemy import String, BigInteger, DateTime
+from sqlalchemy import String, BigInteger, DateTime, Integer
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
@@ -21,5 +21,9 @@ class User(Base):
     status: Mapped[Status] = mapped_column(default=Status.usual)
     money: Mapped[int] = mapped_column(BigInteger, default=50000)
     bank: Mapped[int] = mapped_column(BigInteger, default=0)
+    bitcoin: Mapped[int] = mapped_column(BigInteger, default=0)
+    energy: Mapped[int] = mapped_column(Integer, default=0)
+    rating: Mapped[int] = mapped_column(BigInteger, default=0)
+    experience: Mapped[int] = mapped_column(BigInteger, default=0)
     games_played: Mapped[int] = mapped_column(default=0)
     registered: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
