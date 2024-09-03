@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from app.database.base import Base
 
 class Status(enum.Enum):
-    usual = "ОбычныйЫ"
+    usual = "Обычный"
     standart_vip = 'Standart VIP'
     gold_vip = "Gold VIP"
     platinum_vip = "Platinum VIP"
@@ -20,5 +20,6 @@ class User(Base):
     tg_id: Mapped[int] = mapped_column(BigInteger, unique=True)
     status: Mapped[Status] = mapped_column(default=Status.usual)
     money: Mapped[int] = mapped_column(BigInteger, default=50000)
+    bank: Mapped[int] = mapped_column(BigInteger, default=0)
     games_played: Mapped[int] = mapped_column(default=0)
     registered: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())

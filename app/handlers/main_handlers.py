@@ -22,10 +22,6 @@ async def help(message: Message):
 @main_router.message(F.text.lower() == "профиль")
 async def help(message: Message):
     profile = await get_user(message.from_user.id)
-    await message.answer(f"""
-id: {profile.id} \n
-Статус: {profile.status} \n
-Денег: {profile.money} \n
-Игр сыграно: {profile.games_played} \n
-Дата регистрации: {profile.registered} \n
-                         """)
+    profile_text = {
+        ""
+    }
