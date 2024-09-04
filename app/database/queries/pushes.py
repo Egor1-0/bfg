@@ -15,13 +15,8 @@ async def increanse(bit: int, user_id: int):
         user.money += bit
         await session.commit()
 
-async def loss(bit: int, user_id: int):
+async def deincreanse(bit: int, user_id: int):
     async with async_session() as session:
         user = await session.scalar(select(User).where(User.tg_id == user_id))
         user.money -= bit
-        await session.commit()
-
-async def update_user(user):
-    async with async_session() as session:
-        session.add(user)
         await session.commit()

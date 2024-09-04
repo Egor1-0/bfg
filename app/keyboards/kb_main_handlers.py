@@ -1,4 +1,4 @@
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 main = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='🤩 Добавить в беседу', url="https://t.me/bfg_sursbot?startgroup=new"), InlineKeyboardButton(text='👥 Наша беседа', url='https://t.me/BFG_surs')]

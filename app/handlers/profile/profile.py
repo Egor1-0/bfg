@@ -1,5 +1,5 @@
 from aiogram import F, Router
-from aiogram.filters import CommandStart, Command
+from aiogram.filters import Command
 from aiogram.types import Message
 
 from app.database.queries import push_user, get_user

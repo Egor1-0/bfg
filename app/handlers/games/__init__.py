@@ -4,7 +4,11 @@ from app.handlers.games.cube import cubes_router
 from app.handlers.games.basketball import basketball_router
 from app.handlers.games.darts import darts_router
 from app.handlers.games.football import football_router
+from app.middlewares import CheckMoney
+
 
 games_router = Router()
+
+games_router.message.outer_middleware(CheckMoney())
 
 games_router.include_routers(cubes_router, basketball_router, darts_router, football_router)
