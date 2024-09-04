@@ -21,3 +21,7 @@ async def loss(bit: int, user_id: int):
         user.money -= bit
         await session.commit()
 
+async def update_user(user):
+    async with async_session() as session:
+        session.add(user)
+        await session.commit()
