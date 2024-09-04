@@ -1,7 +1,7 @@
 import enum
 from datetime import datetime
 
-from sqlalchemy import String, BigInteger, DateTime, Integer
+from sqlalchemy import String, BigInteger, DateTime, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
@@ -19,11 +19,23 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     tg_id: Mapped[int] = mapped_column(BigInteger, unique=True)
     status: Mapped[Status] = mapped_column(default=Status.usual)
+    games_played: Mapped[int] = mapped_column(default=0)
+    registered: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
+
+class Finance(Base):
+    __tablename__ = 'finances'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user: Mapped[int] = mapped_column(BigInteger, ForeignKey(User.id))
     money: Mapped[int] = mapped_column(BigInteger, default=50000)
     bank: Mapped[int] = mapped_column(BigInteger, default=0)
     bitcoin: Mapped[int] = mapped_column(BigInteger, default=0)
+
+class Characteristic(Base):
+    __tablename__ = "characteristics"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user: Mapped[int] = mapped_column(BigInteger, ForeignKey(User.id))
     energy: Mapped[int] = mapped_column(Integer, default=0)
     rating: Mapped[int] = mapped_column(BigInteger, default=0)
     experience: Mapped[int] = mapped_column(BigInteger, default=0)
-    games_played: Mapped[int] = mapped_column(default=0)
-    registered: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())

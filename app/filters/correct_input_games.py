@@ -1,8 +1,6 @@
 from aiogram.types import Message
 from aiogram.filters import BaseFilter
 
-from app.database.queries import get_user
-
 
 class LenInputData(BaseFilter):
     async def __call__(self, message: Message):  

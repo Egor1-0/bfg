@@ -2,8 +2,7 @@ from aiogram import F, Router
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 
-from app.database.queries import push_user, get_user
-from app.keyboards.kb_main_handlers import main, help_main, back_help
+from app.keyboards.kb_main_handlers import main, help_main
 
 main_router = Router()
 
