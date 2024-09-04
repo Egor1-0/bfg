@@ -5,7 +5,6 @@ from aiogram.filters import or_f
 
 from app.filters import LenInputData, DateValue
 from app.database.queries import increanse, deincreanse
-from app.database.queries.requests import get_user
 from app.middlewares import CheckMoney
 
 gift_router = Router()
