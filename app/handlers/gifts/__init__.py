@@ -1,1 +1,1 @@
-from app.handlers.gifts.gift_handlers import base_router
+from app.handlers.gifts.gift_handlers import gift_router
