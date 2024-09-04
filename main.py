@@ -7,6 +7,7 @@ from aiogram import Bot, Dispatcher
 
 from app.database.session import create_session
 from app.handlers import main_router_
+from app.middlewares import CheckUser
 
 load_dotenv()
 
@@ -16,6 +17,7 @@ async def main():
     dp = Dispatcher()
 
     dp.include_routers(main_router_)
+    dp.message.outer_middleware(CheckUser())
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
