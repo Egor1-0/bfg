@@ -9,6 +9,6 @@ from app.middlewares import CheckMoney
 
 games_router = Router()
 
-games_router.message.outer_middleware(CheckMoney())
+games_router.message.middleware(CheckMoney())
 
 games_router.include_routers(cubes_router, basketball_router, darts_router, football_router)

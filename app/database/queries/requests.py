@@ -20,7 +20,7 @@ async def get_user_id(user_id: int) -> int:
 
 async def get_user_money(user_id: int):
     async with async_session() as session:
-        # print(await get_user_id(user_id), await session.scalar(select(Finance).where(Finance.user == await get_user_id(user_id))))
+        await get_user_id(user_id), await session.scalar(select(Finance).where(Finance.user == await get_user_id(user_id)))
         return await session.scalar(select(Finance).where(Finance.user == await get_user_id(user_id)))
 
 
