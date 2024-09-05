@@ -5,6 +5,8 @@ from aiogram.types import Message
 from app.filters import CubeValue, LenInputCube, RateValueCube
 from app.database.queries import increanse, deincreanse
 
+from app.src.emoji_list import *
+
 cubes_router = Router()
 
 cubes_router.message.filter(F.text.lower().startswith('кубик'))
@@ -36,5 +38,5 @@ async def cube(message: Message, bot: Bot):
         else:
             losser = int(message.text.split(' ')[1])
             await deincreanse(losser, message.from_user.id)
-            # randoms = random.choice(emoji)
-            await message.answer(f" | Вы проиграли {losser}$")
+            randoms = random.choice(set_emoji)
+            await message.answer(f" {randoms} | Вы проиграли {losser}$")

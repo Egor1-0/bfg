@@ -5,12 +5,13 @@ from aiogram.types import Message
 from app.filters import LenInputData, DateValue
 from app.database.queries import increanse, deincreanse
 
+from app.src.emoji_list import *
+
 
 basketball_router = Router()
 
 basketball_router.message.filter(F.text.lower().startswith('баскетбол'))
 
-# emoji = ('😂', '😣', '🫢', '🤧')
 
 @basketball_router.message(~LenInputData())
 async def uncorrect_input(message: Message):
@@ -32,5 +33,5 @@ async def cube(message: Message, bot: Bot):
         else:
             losser = int(message.text.split(' ')[1])
             await deincreanse(losser, message.from_user.id)
-            # randoms = random.choice(emoji)
-            await message.answer(f" | Вы проиграли {losser}$")
+            randoms = random.choice(set_emoji)
+            await message.answer(f" {randoms} | Вы проиграли {losser}$")

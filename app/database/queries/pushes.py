@@ -1,4 +1,4 @@
-from sqlalchemy import update
+from sqlalchemy import select, update
 
 from app.database.models import User, Finance, Characteristic
 from app.database.session import async_session
