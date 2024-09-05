@@ -5,11 +5,11 @@ from aiogram.filters import or_f
 
 from app.filters import LenInputData, DateValue
 from app.database.queries import increanse, deincreanse
-from app.middlewares import CheckMoney
+from app.filters import CheckMoney
 
 gift_router = Router()
 
-gift_router.message.outer_middleware(CheckMoney())
+gift_router.message.filter(CheckMoney())
 
 gift_router.message.filter(F.text.lower().startswith('дать'))
 
