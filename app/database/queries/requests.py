@@ -27,7 +27,3 @@ async def get_user_money(user_id: int):
 async def get_user_characteristic(user_id: int):
     async with async_session() as session:
         return await session.scalar(select(Characteristic).where(Characteristic.user == await get_user_id(user_id)))
-
-async def get_user_energy(user_id: int):
-    async with async_session() as session:
-        return await session.scalar(select(Characteristic.energy).where(Characteristic.user_id == user_id))
