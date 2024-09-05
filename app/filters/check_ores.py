@@ -8,7 +8,8 @@ class CheckOres(BaseFilter):
         ores = await get_ores()
         ore_name = message.text.lower().split(' ')[1]
         for ore in ores:
-            print(ore.ore, ore_name)
             if ore.ore == ore_name:
                 return True
-        return False
+        await message.answer('не найдено такой тип руды')
+
+

@@ -7,20 +7,25 @@ from app.database.queries import get_ores, get_user_id, get_ore_id
 
 async def push_ore():
     async with async_session() as session:
-        session.add(Ore(ore="железо", experience=0))
-        session.add(Ore(ore="золото", experience=500))
-        session.add(Ore(ore="алмаз", experience=2000))
-        session.add(Ore(ore="аметист", experience=10000))
-        session.add(Ore(ore="аквамарин", experience=25000))
-        session.add(Ore(ore="изумруд", experience=60000))
-        session.add(Ore(ore="материя", experience=100000))
-        session.add(Ore(ore="плазма", experience=500000))
-        session.add(Ore(ore="никель", experience=950000))
-        session.add(Ore(ore="титан", experience=5000000))
-        session.add(Ore(ore="кобальт", experience=20000000))
-        session.add(Ore(ore="эктоплазма", experience=10000000000))
-        await session.commit()
+        existing_ores = await session.execute(select(Ore).limit(1))
+        if existing_ores.scalars().first() is not None:
+            return
 
+        session.add_all([
+            Ore(ore="железо", experience=0),
+            Ore(ore="золото", experience=500),
+            Ore(ore="алмаз", experience=2000),
+            Ore(ore="аметист", experience=10000),
+            Ore(ore="аквамарин", experience=25000),
+            Ore(ore="изумруд", experience=60000),
+            Ore(ore="материя", experience=100000),
+            Ore(ore="плазма", experience=500000),
+            Ore(ore="никель", experience=950000),
+            Ore(ore="титан", experience=5000000),
+            Ore(ore="кобальт", experience=20000000),
+            Ore(ore="эктоплазма", experience=10000000000)
+        ])
+        await session.commit()
 
 
 async def push_user(user_id: int):
@@ -55,4 +60,9 @@ async def increanse_ores(user_tg_id, name_ore, amount_ore):
 async def deincreanse_energy(user_id: int):
     async with async_session() as session:
         await session.execute(update(Characteristic).values(energy=Characteristic.energy - 1).where(Characteristic.user == await get_user_id(user_id)))
+        await session.commit()
+
+async def update_user_experience(user_id: int, experiences: int):
+    async with async_session() as session:
+        await session.execute(update(Characteristic).values(experience=Characteristic.experience + experiences).where(Characteristic.user == await get_user_id(user_id)))
         await session.commit()
