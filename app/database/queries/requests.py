@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from app.database.models import User, Finance, Characteristic
+from app.database.models import User, Finance, Characteristic, Inventory, Ore
 from app.database.session import async_session
 
 async def get_user(user_id: int):
@@ -27,3 +27,11 @@ async def get_user_money(user_id: int):
 async def get_user_characteristic(user_id: int):
     async with async_session() as session:
         return await session.scalar(select(Characteristic).where(Characteristic.user == await get_user_id(user_id)))
+
+async def get_user_inventory(user_id: int):
+    async with async_session() as session:
+        return await session.scalar(select(Inventory).where(Inventory.user == await get_user_id(user_id)))
+
+async def get_ore(user_id: int):
+    async with async_session() as session:
+        return await session.scalars(select(Ore))

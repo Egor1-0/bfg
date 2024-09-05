@@ -7,19 +7,20 @@ from app.database.queries import get_user_money, get_user_id
 
 async def push_ore():
     async with async_session() as session:
-        session.add(Ore(ore="iron", experience=0))
-        session.add(Ore(ore="gold", experience=500))
-        session.add(Ore(ore="diamond", experience=2000))
-        session.add(Ore(ore="amethyst", experience=10000))
-        session.add(Ore(ore="aquamarine", experience=25000))
-        session.add(Ore(ore="emerald", experience=60000))
-        session.add(Ore(ore="matter", experience=100000))
-        session.add(Ore(ore="plasma", experience=500000))
-        session.add(Ore(ore="nickel", experience=950000))
-        session.add(Ore(ore="titanium", experience=5000000))
-        session.add(Ore(ore="cobalt", experience=20000000))
-        session.add(Ore(ore="ectoplasm", experience=10000000000))
+        session.add(Ore(ore="железо", experience=0))
+        session.add(Ore(ore="золото", experience=500))
+        session.add(Ore(ore="алмаз", experience=2000))
+        session.add(Ore(ore="аметист", experience=10000))
+        session.add(Ore(ore="аквамарин", experience=25000))
+        session.add(Ore(ore="изумруд", experience=60000))
+        session.add(Ore(ore="материя", experience=100000))
+        session.add(Ore(ore="плазма", experience=500000))
+        session.add(Ore(ore="никель", experience=950000))
+        session.add(Ore(ore="титан", experience=5000000))
+        session.add(Ore(ore="кобальт", experience=20000000))
+        session.add(Ore(ore="эктоплазма", experience=10000000000))
         await session.commit()
+
 
 
 async def push_user(user_id: int):
