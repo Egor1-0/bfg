@@ -50,6 +50,28 @@ class Ore(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     ore: Mapped[str] = mapped_column(String(20))
     experience: Mapped[int] = mapped_column(BigInteger)
+
+
+class Inventory(Base):
+    __tablename__ = 'inventory'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user: Mapped[int] = mapped_column(BigInteger, ForeignKey(User.id))
+    iron: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
+    gold: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
+    diamond: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
+    amethyst: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
+    aquamarine: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
+    emerald: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
+    matter: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
+    plasma: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
+    nickel: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
+    titanium: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
+    cobalt: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
+    ectoplasm: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
+    palladium: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
+
+
     # iron: Mapped[int] = mapped_column(BigInteger, default=0)
     # gold: Mapped[int] = mapped_column(BigInteger, default=0)
     # diamond: Mapped[int] = mapped_column(BigInteger, default=0)
@@ -77,24 +99,3 @@ class Ore(Base):
 #     'кобальт': {'field': 'cobalt', 'experience': 20000000},
 #     'эктоплазма': {'field': 'ectoplasm', 'experience': 10000000000}
 # }
-
-
-
-class Inventory(Base):
-    __tablename__ = 'inventory'
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    user: Mapped[int] = mapped_column(BigInteger, ForeignKey(User.id))
-    iron: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
-    gold: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
-    diamond: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
-    amethyst: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
-    aquamarine: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
-    emerald: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
-    matter: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
-    plasma: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
-    nickel: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
-    titanium: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
-    cobalt: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
-    ectoplasm: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
-    palladium: Mapped[int] = mapped_column(ForeignKey(Ore.id), default=0)
