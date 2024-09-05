@@ -2,7 +2,7 @@ from sqlalchemy import select, update
 
 from app.database.models import User, Finance, Characteristic, Ore, Inventory
 from app.database.session import async_session
-from app.database.queries import get_user_money, get_user_id
+from app.database.queries import get_ores, get_user_id, get_ore_id
 
 
 async def push_ore():
@@ -29,6 +29,8 @@ async def push_user(user_id: int):
         await session.commit()
         session.add(Finance(user=await get_user_id(user_id)))
         session.add(Characteristic(user=await get_user_id(user_id)))
+        for ore in await get_ores():
+            session.add(Inventory(user=await get_user_id(user_id), ore = ore.id))
         await session.commit()
 
 
@@ -43,6 +45,14 @@ async def deincreanse(bit: int, user_id: int):
         await session.execute(update(Finance).values(money=Finance.money - bit).where(Finance.user == await get_user_id(user_id)))
         await session.commit()
 
-async def increanse_ores(user_id, name_ores, amount_ores):
+async def increanse_ores(user_tg_id, name_ore, amount_ore):
     async with async_session() as session:
-        await session.execute(update(Inventory).values(name_ores=Inventory.name_ores + amount_ores))
+        user_id = await get_user_id(user_tg_id)
+        ore_id = await get_ore_id(name_ore)
+        await session.execute(update(Inventory).values(ammount_ore=Inventory.ammount_ore + amount_ore).where(Inventory.user == user_id, Inventory.ore == ore_id))
+        await session.commit()
+
+async def deincreanse_energy(user_id: int):
+    async with async_session() as session:
+        await session.execute(update(Characteristic).values(energy=Characteristic.energy - 1).where(Characteristic.user == await get_user_id(user_id)))
+        await session.commit()

@@ -35,3 +35,7 @@ async def get_user_inventory(user_id: int):
 async def get_ores():
     async with async_session() as session:
         return await session.scalars(select(Ore))
+    
+async def get_ore_id(ore: str) -> int:
+    async with async_session() as session:
+        return (await session.scalar(select(Ore).where(Ore.ore == ore))).id
