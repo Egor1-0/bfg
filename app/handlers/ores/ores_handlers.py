@@ -9,11 +9,11 @@ from app.filters import CheckEnergy, CheckOres
 
 ores_router = Router()
 
-ores_router.message.filter(CheckEnergy(), CheckOres())
+# ores_router.message.filter(CheckEnergy(), CheckOres())
 
 ores_router.message.filter(F.text.lower().startswith('копать'))
 
 
-@ores_router.message()
+@ores_router.message(CheckEnergy(), CheckOres())
 async def ores_get(message: Message):
-    await message.answer("выкопал говно")
+    random_ores = random.randint(1, 100)

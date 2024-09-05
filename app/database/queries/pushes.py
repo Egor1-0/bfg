@@ -1,6 +1,6 @@
 from sqlalchemy import select, update
 
-from app.database.models import User, Finance, Characteristic, Ore
+from app.database.models import User, Finance, Characteristic, Ore, Inventory
 from app.database.session import async_session
 from app.database.queries import get_user_money, get_user_id
 
@@ -42,3 +42,7 @@ async def deincreanse(bit: int, user_id: int):
     async with async_session() as session:
         await session.execute(update(Finance).values(money=Finance.money - bit).where(Finance.user == await get_user_id(user_id)))
         await session.commit()
+
+async def increanse_ores(user_id, name_ores, amount_ores):
+    async with async_session() as session:
+        await session.execute(update(Inventory).values(name_ores=Inventory.name_ores + amount_ores))
