@@ -7,6 +7,7 @@ from app.keyboards.kb_profile import main_profile
 
 profile_router = Router()
 
+
 @profile_router.message(Command("profile"))
 @profile_router.message(F.text.lower() == "профиль")
 async def cmd_profile(message: Message):

@@ -23,6 +23,7 @@ class User(Base):
     games_played: Mapped[int] = mapped_column(default=0)
     registered: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
     limit: Mapped[int] = mapped_column(BigInteger, default=300000000000000)
+    transferred: Mapped[int] = mapped_column(BigInteger, default=0)
 
 class Finance(Base):
     __tablename__ = 'finances'

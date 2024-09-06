@@ -2,7 +2,9 @@ from aiogram import F, Router
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 
+from app.database.queries.requests import get_user, get_user_inventory
 from app.keyboards.kb_main_handlers import main, help_main
+from app.src.ores_list import ore_icon
 
 main_router = Router()
 
@@ -17,6 +19,35 @@ async def start(message: Message):
                          f"🔍 Познакомиться со всеми моими возможностями ты\n"
                          f" можешь, введя команду «помощь».", reply_markup=main)
 
+
+@main_router.message(F.text.lower() == 'мой лимит')
+async def user_limit(message: Message):
+    user_limits = await get_user(message.from_user.id)
+    await message.answer(
+        f'🛑 здесь ваш лимит на сегодня: 300.000.000.000.000$ \n'
+        f'💫 Вы уже передали: {user_limits.transferred} \n'
+        f'🚀 У вас осталось: {user_limits.limit}'
+    )
+
+
+@main_router.message(F.text.lower() == 'инвентарь')
+async def user_inventory(message: Message):
+    inventory = await get_user_inventory(message.from_user.id)
+    inventory_text = []
+
+    for item in inventory:
+        ore_name = item.ore.lower()
+        amount = item.ammount_ore
+
+        icon = ore_icon.get(ore_name, ore_name)  # Используем ore_name как ключ для получения иконки
+
+        if amount > 0:
+            inventory_text.append(f"{icon}: {amount} шт")
+
+    if inventory_text:
+        await message.answer(f"Ваш инвентарь:\n" + "\n".join(inventory_text))
+    else:
+        await message.answer("Ваш инвентарь пуст")
 
 @main_router.message(Command("help"))
 @main_router.message(F.text.lower() == "помощь")
