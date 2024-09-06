@@ -12,18 +12,18 @@ async def push_ore():
             return
 
         session.add_all([
-            Ore(ore="железо", experience=0),
-            Ore(ore="золото", experience=500),
-            Ore(ore="алмаз", experience=2000),
-            Ore(ore="аметист", experience=10000),
-            Ore(ore="аквамарин", experience=25000),
-            Ore(ore="изумруд", experience=60000),
-            Ore(ore="материя", experience=100000),
-            Ore(ore="плазма", experience=500000),
-            Ore(ore="никель", experience=950000),
-            Ore(ore="титан", experience=5000000),
-            Ore(ore="кобальт", experience=20000000),
-            Ore(ore="эктоплазма", experience=10000000000)
+            Ore(ore="железо", experience=0, price=230000),
+            Ore(ore="золото", experience=500, price=1000000),
+            Ore(ore="алмаз", experience=2000, price=116000000),
+            Ore(ore="аметист", experience=10000, price=217000000),
+            Ore(ore="аквамарин", experience=25000, price=461000000),
+            Ore(ore="изумруд", experience=60000, price=792000000),
+            Ore(ore="материя", experience=100000, price=8000000000),
+            Ore(ore="плазма", experience=500000, price=12000000000),
+            Ore(ore="никель", experience=950000, price=30000000000),
+            Ore(ore="титан", experience=5000000, price=70000000000000),
+            Ore(ore="кобальт", experience=20000000, price=120000000000000),
+            Ore(ore="эктоплазма", experience=10000000000, price=20000000000000000)
         ])
         await session.commit()
 
@@ -74,4 +74,10 @@ async def update_user_experience(user_id: int, experiences: int):
 async def limit_user(user_id: int, amount: int):
     async with async_session() as session:
         await session.execute(update(User).values(limit=User.limit - amount).where(User.id == await get_user_id(user_id)))
+        await session.commit()
+
+
+async def reset_ammoint_ore(user_id: int, ore_name: int):
+    async with async_session() as session:
+        await session.execute(update(Inventory).values(ammount_ore = 0).where((Inventory.user == await get_user_id(user_id)) & (Inventory.ore == await get_ore_id(ore_name))))
         await session.commit()

@@ -50,6 +50,7 @@ class Ore(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     ore: Mapped[str] = mapped_column(String(20))
     experience: Mapped[int] = mapped_column(BigInteger)
+    price: Mapped[int] = mapped_column(BigInteger)
 
 
 class Inventory(Base):

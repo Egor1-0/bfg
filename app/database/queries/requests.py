@@ -31,12 +31,22 @@ async def get_user_characteristic(user_id: int):
 
 async def get_user_inventory(user_id: int):
     async with async_session() as session:
-        return await session.scalar(select(Inventory).where(Inventory.user == await get_user_id(user_id)))
+        return await session.scalars(select(Inventory).where(Inventory.user == await get_user_id(user_id)))
 
 
 async def get_ores():
     async with async_session() as session:
         return await session.scalars(select(Ore))
+    
+
+async def get_user_ore_count(user_id: int, ore_name: str):
+    async with async_session() as session:
+        return (await session.scalar(select(Inventory).where((Inventory.user == await get_user_id(user_id)) & (Inventory.ore == await get_ore_id(ore_name))))).ammount_ore
+
+
+async def get_ore(ore_name: str):
+    async with async_session() as session:
+        return await session.scalar(select(Ore).where(Ore.ore == ore_name))
     
 
 async def get_ore_id(ore: str) -> int:
