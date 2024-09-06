@@ -26,12 +26,12 @@ async def uncorrect_input(message: Message):
 @football_router.message(LenInputData(), DateValue())
 async def cube(message: Message, bot: Bot): 
         mes = await bot.send_dice(chat_id=message.chat.id, emoji='⚽')
-        if mes.dice.value in [3, 4, 5, 6]:
+        if mes.dice.value in [3, 4, 5, 6]: #проверка попадания
             winning = int(message.text.split(' ')[1]) * (mes.dice.value - 3)
             await increanse(winning, message.from_user.id)
             await message.answer(f"🎁 | {message.from_user.first_name} Вы попали! \n  💰 Вы получили +{winning}$")
         else:
             losser = int(message.text.split(' ')[1])
             await deincreanse(losser, message.from_user.id)
-            randoms = random.choice(set_emoji)
+            randoms = random.choice(sad_emoji)
             await message.answer(f" {randoms} | Вы проиграли {losser}$")

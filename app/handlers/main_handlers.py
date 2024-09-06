@@ -39,7 +39,7 @@ async def user_inventory(message: Message):
         ore_name = (await get_ore_by_id(item.ore.lower())).ore
         amount = item.ammount_ore
 
-        icon = ore_icon.get(ore_name)  # Используем ore_name как ключ для получения иконки
+        icon = ore_icon.get(ore_name)  #получение иконки по имени руды
 
         inventory_text.append(f"{icon} {ore_name}: {amount} шт")
 
