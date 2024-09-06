@@ -48,7 +48,6 @@ async def increanse(bit: int, user_id: int):
 async def deincreanse(bit: int, user_id: int):
     async with async_session() as session:
         await session.execute(update(Finance).values(money = Finance.money - bit).where(Finance.user == await get_user_id(user_id)))
-        await session.execute(update(Finance).values(money=Finance.money - bit).where(Finance.user == await get_user_id(user_id)))
         await session.commit()
 
 

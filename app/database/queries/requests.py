@@ -49,6 +49,11 @@ async def get_ore(ore_name: str):
         return await session.scalar(select(Ore).where(Ore.ore == ore_name))
     
 
+async def get_ore_by_id(id_: int):
+    async with async_session() as session:
+        return await session.scalar(select(Ore).where(Ore.id == id_))
+
+
 async def get_ore_id(ore: str) -> int:
     async with async_session() as session:
         return (await session.scalar(select(Ore).where(Ore.ore == ore))).id
