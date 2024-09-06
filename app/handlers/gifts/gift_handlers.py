@@ -4,7 +4,7 @@ from aiogram.types import Message
 from aiogram.filters import or_f
 
 from app.filters import LenInputData, DateValue
-from app.database.queries import increanse, deincreanse
+from app.database.queries import increanse, deincreanse, limit_user, get_user
 from app.filters import CheckMoney, CheckLimit
 
 gift_router_enough = Router()
@@ -25,10 +25,14 @@ async def give_money_handler(message: Message):
     if message.reply_to_message is None:
         await message.answer("Чтобы передать деньги, нужно ответить на сообщение пользователя 😞")
         return
+    limits = await get_user(message.from_user.id)
     amount = int(message.text.split(" ")[1])
-    await increanse(amount, message.reply_to_message.from_user.id)
-    await deincreanse(amount, message.from_user.id)
-
-    await message.reply_to_message.answer(
-        f"✅ | {amount} успешно передано пользователю {message.reply_to_message.from_user.full_name}!"
-    )
+    if limits.limit >= amount:
+        await increanse(amount, message.reply_to_message.from_user.id)
+        await deincreanse(amount, message.from_user.id)
+        await limit_user(message.from_user.id, amount)
+        await message.reply_to_message.answer(
+            f"✅ | {amount} успешно передано пользователю {message.reply_to_message.from_user.full_name}!"
+        )
+    else:
+        await message.answer(f"⚠️ | Ваш лимит : {limits.limit}")
