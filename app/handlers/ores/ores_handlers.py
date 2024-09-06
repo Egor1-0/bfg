@@ -22,16 +22,9 @@ async def ores_get(message: Message):
     random_ores = random.randint(1, 100)
 
     user_characteristic = await get_user_characteristic(message.from_user.id)
-    if not user_characteristic:
-        await message.answer('Ошибка получения характеристик пользователя.')
-        return
-
     ores = await get_ores()
-
     ore_info = next((ore for ore in ores if ore.ore == ore_name), None)
-    if not ore_info:
-        await message.answer('Ошибка получения информации о руде.')
-        return
+
 
     if user_characteristic.experience >= ore_info.experience:
         min_exp, max_exp = experience_ranges.get(ore_name, (0, 0))
@@ -50,4 +43,3 @@ async def ores_get(message: Message):
         await message.answer(
             f'❌ | У вас недостаточно опыта для добычи {ore_name}. \n⚠️ | Требуется {ore_info.experience} опыта.'
         )
-

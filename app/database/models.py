@@ -22,6 +22,7 @@ class User(Base):
     status: Mapped[Status] = mapped_column(default=Status.usual)
     games_played: Mapped[int] = mapped_column(default=0)
     registered: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
+    limit: Mapped[int] = mapped_column(BigInteger, default=300000000000000)
 
 
 class Finance(Base):
