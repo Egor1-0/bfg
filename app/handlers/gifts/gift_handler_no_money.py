@@ -1,10 +1,6 @@
-import random
 from aiogram import Router, F
 from aiogram.types import Message
-from aiogram.filters import or_f
 
-from app.filters import LenInputData, DateValue
-from app.database.queries import increanse, deincreanse
 from app.filters import CheckMoney, CheckLimit
 
 gift_router_no_money = Router()

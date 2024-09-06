@@ -1,11 +1,8 @@
 import random
 from aiogram import Router, F
 from aiogram.types import Message
-from aiogram.filters import or_f
 
-from app.filters import LenInputData, DateValue
-from app.database.queries import (increanse, deincreanse, get_user_inventory,
-                                  increanse_ores, deincreanse_energy, get_user_characteristic, get_ores, update_user_experience)
+from app.database.queries import increanse_ores, deincreanse_energy, get_user_characteristic, get_ores, update_user_experience
 from app.filters import CheckEnergy, CheckOres
 from app.src.ores_list import ore_icon, experience_ranges
 
