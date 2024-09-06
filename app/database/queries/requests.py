@@ -18,24 +18,27 @@ async def get_user_id(user_id: int) -> int:
         return (await session.scalar(select(User).where(User.tg_id == user_id))).id
 
 
-
 async def get_user_money(user_id: int):
     async with async_session() as session:
         await get_user_id(user_id), await session.scalar(select(Finance).where(Finance.user == await get_user_id(user_id)))
         return await session.scalar(select(Finance).where(Finance.user == await get_user_id(user_id)))
 
+
 async def get_user_characteristic(user_id: int):
     async with async_session() as session:
         return await session.scalar(select(Characteristic).where(Characteristic.user == await get_user_id(user_id)))
+
 
 async def get_user_inventory(user_id: int):
     async with async_session() as session:
         return await session.scalar(select(Inventory).where(Inventory.user == await get_user_id(user_id)))
 
+
 async def get_ores():
     async with async_session() as session:
         return await session.scalars(select(Ore))
     
+
 async def get_ore_id(ore: str) -> int:
     async with async_session() as session:
         return (await session.scalar(select(Ore).where(Ore.ore == ore))).id

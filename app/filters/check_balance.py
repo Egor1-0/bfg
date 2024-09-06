@@ -12,6 +12,6 @@ class CheckMoney(BaseFilter):
                 if user.money >= int(input_data[1]):
                     return True
                 else:
-                    await message.answer('❌ | У вас недостаточно денег для передачи.')
+                    return False
             except:
                 return False

@@ -11,5 +11,6 @@ class CheckOres(BaseFilter):
             if ore.ore == ore_name:
                 return True
         await message.answer('не найдено такой тип руды')
+        """ИСПРАВИТЬ"""
 
 

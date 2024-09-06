@@ -50,6 +50,7 @@ async def deincreanse(bit: int, user_id: int):
         await session.execute(update(Finance).values(money=Finance.money - bit).where(Finance.user == await get_user_id(user_id)))
         await session.commit()
 
+
 async def increanse_ores(user_tg_id, name_ore, amount_ore):
     async with async_session() as session:
         user_id = await get_user_id(user_tg_id)
@@ -57,10 +58,12 @@ async def increanse_ores(user_tg_id, name_ore, amount_ore):
         await session.execute(update(Inventory).values(ammount_ore=Inventory.ammount_ore + amount_ore).where(Inventory.user == user_id, Inventory.ore == ore_id))
         await session.commit()
 
+
 async def deincreanse_energy(user_id: int):
     async with async_session() as session:
         await session.execute(update(Characteristic).values(energy=Characteristic.energy - 1).where(Characteristic.user == await get_user_id(user_id)))
         await session.commit()
+
 
 async def update_user_experience(user_id: int, experiences: int):
     async with async_session() as session:

@@ -9,4 +9,4 @@ class CheckLimit(BaseFilter):
         if user.limit > 0:
             return True
         else:
-            await message.answer('❌ | У вас закончился лимит')
+            return False

@@ -25,7 +25,6 @@ async def ores_get(message: Message):
     ores = await get_ores()
     ore_info = next((ore for ore in ores if ore.ore == ore_name), None)
 
-
     if user_characteristic.experience >= ore_info.experience:
         min_exp, max_exp = experience_ranges.get(ore_name, (0, 0))
         earned_experience = random.randint(min_exp, max_exp)
