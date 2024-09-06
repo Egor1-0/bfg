@@ -11,6 +11,7 @@ class CheckMoney(BaseFilter):
             try:
                 if user.money >= int(input_data[1]):
                     return True
-                return False
+                else:
+                    return False
             except:
                 return False

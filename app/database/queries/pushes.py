@@ -1,24 +1,30 @@
-from sqlalchemy import update
+from sqlalchemy import update, select
 
-from app.database.models import User, Finance, Characteristic, Ore
+from app.database.models import User, Finance, Characteristic, Ore, Inventory
 from app.database.session import async_session
-from app.database.queries import get_user_id
+from app.database.queries import get_ores, get_user_id, get_ore_id
 
 
 async def push_ore():
     async with async_session() as session:
-        session.add(Ore(ore="iron", experience=0))
-        session.add(Ore(ore="gold", experience=500))
-        session.add(Ore(ore="diamond", experience=2000))
-        session.add(Ore(ore="amethyst", experience=10000))
-        session.add(Ore(ore="aquamarine", experience=25000))
-        session.add(Ore(ore="emerald", experience=60000))
-        session.add(Ore(ore="matter", experience=100000))
-        session.add(Ore(ore="plasma", experience=500000))
-        session.add(Ore(ore="nickel", experience=950000))
-        session.add(Ore(ore="titanium", experience=5000000))
-        session.add(Ore(ore="cobalt", experience=20000000))
-        session.add(Ore(ore="ectoplasm", experience=10000000000))
+        existing_ores = await session.execute(select(Ore).limit(1))
+        if existing_ores.scalars().first() is not None:
+            return
+
+        session.add_all([
+            Ore(ore="железо", experience=0),
+            Ore(ore="золото", experience=500),
+            Ore(ore="алмаз", experience=2000),
+            Ore(ore="аметист", experience=10000),
+            Ore(ore="аквамарин", experience=25000),
+            Ore(ore="изумруд", experience=60000),
+            Ore(ore="материя", experience=100000),
+            Ore(ore="плазма", experience=500000),
+            Ore(ore="никель", experience=950000),
+            Ore(ore="титан", experience=5000000),
+            Ore(ore="кобальт", experience=20000000),
+            Ore(ore="эктоплазма", experience=10000000000)
+        ])
         await session.commit()
 
 
@@ -28,6 +34,8 @@ async def push_user(user_id: int):
         await session.commit()
         session.add(Finance(user=await get_user_id(user_id)))
         session.add(Characteristic(user=await get_user_id(user_id)))
+        for ore in await get_ores():
+            session.add(Inventory(user=await get_user_id(user_id), ore = ore.id))
         await session.commit()
 
 
@@ -40,4 +48,25 @@ async def increanse(bit: int, user_id: int):
 async def deincreanse(bit: int, user_id: int):
     async with async_session() as session:
         await session.execute(update(Finance).values(money = Finance.money - bit).where(Finance.user == await get_user_id(user_id)))
+        await session.execute(update(Finance).values(money=Finance.money - bit).where(Finance.user == await get_user_id(user_id)))
+        await session.commit()
+
+
+async def increanse_ores(user_tg_id, name_ore, amount_ore):
+    async with async_session() as session:
+        user_id = await get_user_id(user_tg_id)
+        ore_id = await get_ore_id(name_ore)
+        await session.execute(update(Inventory).values(ammount_ore=Inventory.ammount_ore + amount_ore).where(Inventory.user == user_id, Inventory.ore == ore_id))
+        await session.commit()
+
+
+async def deincreanse_energy(user_id: int):
+    async with async_session() as session:
+        await session.execute(update(Characteristic).values(energy=Characteristic.energy - 1).where(Characteristic.user == await get_user_id(user_id)))
+        await session.commit()
+
+
+async def update_user_experience(user_id: int, experiences: int):
+    async with async_session() as session:
+        await session.execute(update(Characteristic).values(experience=Characteristic.experience + experiences).where(Characteristic.user == await get_user_id(user_id)))
         await session.commit()

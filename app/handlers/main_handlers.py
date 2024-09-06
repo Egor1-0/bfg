@@ -17,6 +17,7 @@ async def start(message: Message):
                          f"🔍 Познакомиться со всеми моими возможностями ты\n"
                          f" можешь, введя команду «помощь».", reply_markup=main)
 
+
 @main_router.message(Command("help"))
 @main_router.message(F.text.lower() == "помощь")
 async def help(message: Message):
