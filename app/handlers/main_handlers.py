@@ -43,7 +43,7 @@ async def user_inventory(message: Message):
 
         inventory_text.append(f"{icon} {ore_name}: {amount} шт")
 
-    await message.answer(f"Ваш инвентарь:\n" + "\n".join(inventory_text))
+    await message.answer(f"📥 Ваш инвентарь:\n" + "\n".join(inventory_text))
 
 
 @main_router.message(Command("help"))

@@ -60,7 +60,7 @@ async def increanse_ores(user_tg_id: int, name_ore: str, amount_ore: int):
     async with async_session() as session:
         user_id = await get_user_id(user_tg_id) #получение айди юзера по тг айди
         ore_id = await get_ore_id(name_ore) #получение айди по имени руды
-        await session.execute(update(Inventory).values(ammount_ore=Inventory.ammount_ore + amount_ore).where(Inventory.user == user_id & Inventory.ore == ore_id))
+        await session.execute(update(Inventory).values(ammount_ore=Inventory.ammount_ore + amount_ore).where(Inventory.user == user_id, Inventory.ore == ore_id))
         await session.commit()
 
 
