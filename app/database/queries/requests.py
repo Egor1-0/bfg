@@ -31,13 +31,13 @@ async def get_user_characteristic(user_id: int):
 
 async def get_user_inventory(user_id: int):
     async with async_session() as session:
-        return await session.scalar(select(Inventory).where(Inventory.user == await get_user_id(user_id)))
+        return await session.scalars(select(Inventory).where(Inventory.user == await get_user_id(user_id)))
 
 
 async def get_ores():
     async with async_session() as session:
         return await session.scalars(select(Ore))
-    
+
 
 async def get_ore_id(ore: str) -> int:
     async with async_session() as session:

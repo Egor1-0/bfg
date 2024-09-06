@@ -74,3 +74,8 @@ async def limit_user(user_id: int, amount: int):
     async with async_session() as session:
         await session.execute(update(User).values(limit=User.limit - amount).where(User.id == await get_user_id(user_id)))
         await session.commit()
+
+async def get_transferred(user_id: int, amount):
+    async with async_session() as session:
+        await session.execute(update(User).values(transferred=User.transferred + amount).where(User.id == await get_user_id(user_id)))
+        await session.commit()
