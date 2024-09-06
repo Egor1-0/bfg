@@ -17,6 +17,6 @@ async def sale(message: Message):
     ammount_ore = (await get_user_ore_count(user, ore_name))
     await increanse(ore_price * ammount_ore, user)
     await reset_ammoint_ore(user, ore_name)
-    await message.answer((f"Вы получили {ore_price * ammount_ore}"))
+    await message.answer((f"✨ Вы получили {ore_price * ammount_ore}$"))
     
 

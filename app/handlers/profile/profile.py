@@ -18,7 +18,7 @@ async def cmd_profile(message: Message):
         await push_user(message.from_user.id)
     else:
         profile_text = (
-            f"📖 Ваш профиль:"
+            f"📖 Ваш профиль: \n"
             f"🪪 ID: {profile.id} \n"
             f"🏆 Статус: {profile.status.value}\n"
             f"💰 Денег: {finance.money}$ \n"
