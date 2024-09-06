@@ -21,12 +21,12 @@ async def error(message: Message):
 
 @gift_router_enough.message(LenInputData(), DateValue())
 async def give_money_handler(message: Message):
-    if message.reply_to_message is None:
+    if message.reply_to_message is None: #дать деньги можно только ответив на сообщение человека, с которым хотите поделиться
         await message.answer("Чтобы передать деньги, нужно ответить на сообщение пользователя 😞")
         return
-    limits = await get_user(message.from_user.id)
+    user = await get_user(message.from_user.id)
     amount = int(message.text.split(" ")[1])
-    if limits.limit >= amount:
+    if user.limit >= amount: #проверка, не перевел ли человек больше денег чем может
         await increanse(amount, message.reply_to_message.from_user.id)
         await deincreanse(amount, message.from_user.id)
         await limit_user(message.from_user.id, amount)
@@ -35,4 +35,4 @@ async def give_money_handler(message: Message):
             f"✅ | {amount} успешно передано пользователю {message.reply_to_message.from_user.full_name}!"
         )
     else:
-        await message.answer(f"⚠️ | Ваш лимит : {limits.limit}")
+        await message.answer(f"⚠️ | Ваш лимит : {user.limit}")

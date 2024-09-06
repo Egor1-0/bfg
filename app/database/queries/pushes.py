@@ -6,9 +6,10 @@ from app.database.queries import get_ores, get_user_id, get_ore_id
 
 
 async def push_ore():
+    """ОТПРАВЛЯЕТ ВСЕ РУДЫ В БД ЕСЛИ ИХ ЕЩЕ НЕТ"""
     async with async_session() as session:
         existing_ores = await session.execute(select(Ore).limit(1))
-        if existing_ores.scalars().first() is not None:
+        if existing_ores.scalars().first() is not None: #проверка на наличие
             return
 
         session.add_all([
@@ -29,59 +30,68 @@ async def push_ore():
 
 
 async def push_user(user_id: int):
+    """РЕГИСТРИРУЕТ ПОЛЬЗОВАТЕЛЯ В БД"""
     async with async_session() as session:
-        session.add(User(tg_id=user_id))
+        session.add(User(tg_id=user_id)) #пуш юзера
         await session.commit()
-        session.add(Finance(user=await get_user_id(user_id)))
+        session.add(Finance(user=await get_user_id(user_id)))#пуш финансов и тд
         session.add(Characteristic(user=await get_user_id(user_id)))
-        for ore in await get_ores():
+        for ore in await get_ores(): #проходит по всем рудам и добавляет в инвентарь
             session.add(Inventory(user=await get_user_id(user_id), ore = ore.id))
         await session.commit()
 
 
 async def increanse(bit: int, user_id: int):
+    """УВЕЛИЧИВАЕТ КОЛВО ДЕНЕГ НА ЗАДАННОЕ ЧИСЛО"""
     async with async_session() as session:
         await session.execute(update(Finance).values(money = Finance.money + bit).where(Finance.user == await get_user_id(user_id)))
         await session.commit()
 
 
 async def deincreanse(bit: int, user_id: int):
+    """УМЕНЬШАЕТ КОЛВО ДЕНЕГ НА ЗАДАННОЕ ЧИСЛО"""
     async with async_session() as session:
         await session.execute(update(Finance).values(money = Finance.money - bit).where(Finance.user == await get_user_id(user_id)))
         await session.commit()
 
 
-async def increanse_ores(user_tg_id, name_ore, amount_ore):
+async def increanse_ores(user_tg_id: int, name_ore: str, amount_ore: int):
+    """УВЕЛИЧИВАЕТ КОЛВО РУДЫ НА ЗАДАННОЕ ЧИСЛО ПРИ ДОБЫЧЕ"""
     async with async_session() as session:
-        user_id = await get_user_id(user_tg_id)
-        ore_id = await get_ore_id(name_ore)
-        await session.execute(update(Inventory).values(ammount_ore=Inventory.ammount_ore + amount_ore).where(Inventory.user == user_id, Inventory.ore == ore_id))
+        user_id = await get_user_id(user_tg_id) #получение айди юзера по тг айди
+        ore_id = await get_ore_id(name_ore) #получение айди по имени руды
+        await session.execute(update(Inventory).values(ammount_ore=Inventory.ammount_ore + amount_ore).where(Inventory.user == user_id & Inventory.ore == ore_id))
         await session.commit()
 
 
 async def deincreanse_energy(user_id: int):
+    """УМЕНЬШАЕТ ЭНЕРГИЮ ПРИ ДОБЫЧЕ РУДЫ НА ОДНУ"""
     async with async_session() as session:
         await session.execute(update(Characteristic).values(energy=Characteristic.energy - 1).where(Characteristic.user == await get_user_id(user_id)))
         await session.commit()
 
 
 async def update_user_experience(user_id: int, experiences: int):
+    """УВЕЛИЧЕНИЕ ОПЫТА ЮЗЕРА ПРИ ДОБЫЧЕ РУДЫ"""
     async with async_session() as session:
         await session.execute(update(Characteristic).values(experience=Characteristic.experience + experiences).where(Characteristic.user == await get_user_id(user_id)))
         await session.commit()
 
 async def limit_user(user_id: int, amount: int):
+    """УМЕНЬШЕНИЕ ЛИМИТА ПЕРЕВОДОВ С КАЖДЫМ ПЕРЕВОДОМ"""
     async with async_session() as session:
         await session.execute(update(User).values(limit=User.limit - amount).where(User.id == await get_user_id(user_id)))
         await session.commit()
 
 
 async def reset_ammoint_ore(user_id: int, ore_name: int):
+    """СБРАСЫВАЕТ КОЛВО РУДЫ ПРИ ПРОДАЖЕ"""
     async with async_session() as session:
         await session.execute(update(Inventory).values(ammount_ore = 0).where((Inventory.user == await get_user_id(user_id)) & (Inventory.ore == await get_ore_id(ore_name))))
 
         
 async def get_transferred(user_id: int, amount):
+    """ОБНОВЯЛЕТ КОЛВО ПЕРЕВОДОВ ЗА МЕСЯЦ"""
     async with async_session() as session:
         await session.execute(update(User).values(transferred=User.transferred + amount).where(User.id == await get_user_id(user_id)))
         await session.commit()
