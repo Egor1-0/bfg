@@ -21,9 +21,8 @@ async def ores_get(message: Message):
 
     
     user_characteristic = await get_user_characteristic(message.from_user.id)
-    """ИСПРАВИТЬ ЭТО ГОВНО"""
     ore = await get_ore(message.text.lower().split(' ')[1])
-
+    
     if user_characteristic.experience >= ore.experience: #проверка на то что у пользователя хватает опыта для добычи этой руды
         min_exp, max_exp = experience_ranges.get(ore_name, (0, 0)) #получает границы опыта из срс
         earned_experience = random.randint(min_exp, max_exp)
