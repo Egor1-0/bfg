@@ -88,6 +88,7 @@ async def reset_ammoint_ore(user_id: int, ore_name: int):
     """СБРАСЫВАЕТ КОЛВО РУДЫ ПРИ ПРОДАЖЕ"""
     async with async_session() as session:
         await session.execute(update(Inventory).values(ammount_ore = 0).where((Inventory.user == await get_user_id(user_id)) & (Inventory.ore == (await get_ore(ore_name)).id)))
+        await session.commit()
 
         
 async def get_transferred(user_id: int, amount):
