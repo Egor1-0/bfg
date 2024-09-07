@@ -79,4 +79,4 @@ class Property(Base):
     name: Mapped[str] = mapped_column(String(35))  # name
     price: Mapped[int] = mapped_column(BigInteger)  # price
     description: Mapped[str] = mapped_column(String(255))  # description
-    photo: Mapped[str] = mapped_column(String(100), default=None)  # photo link
+    photo: Mapped[str] = mapped_column(String(100), default="pass")  # photo link
