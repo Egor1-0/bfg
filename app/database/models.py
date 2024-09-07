@@ -96,7 +96,7 @@ class Bank(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user: Mapped[int] = mapped_column(BigInteger, ForeignKey(User.id))
-    money_ammount: Mapped[int] = mapped_column(BigInteger)
+    money_ammount: Mapped[int] = mapped_column(BigInteger, default=0)
     percent: Mapped[int] = mapped_column(Integer, default=6)
     comission: Mapped[int] = mapped_column(Integer, default=1)
 
