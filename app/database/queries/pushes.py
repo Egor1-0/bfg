@@ -2,7 +2,7 @@ from sqlalchemy import update, select
 
 from app.database.models import User, Finance, Characteristic, Ore, Inventory
 from app.database.session import async_session
-from app.database.queries import get_ores, get_user_id, get_ore_id
+from app.database.queries import get_ores, get_user_id, get_ore
 
 
 async def push_ore():
@@ -59,8 +59,8 @@ async def increanse_ores(user_tg_id: int, name_ore: str, amount_ore: int):
     """УВЕЛИЧИВАЕТ КОЛВО РУДЫ НА ЗАДАННОЕ ЧИСЛО ПРИ ДОБЫЧЕ"""
     async with async_session() as session:
         user_id = await get_user_id(user_tg_id) #получение айди юзера по тг айди
-        ore_id = await get_ore_id(name_ore) #получение айди по имени руды
-        await session.execute(update(Inventory).values(ammount_ore=Inventory.ammount_ore + amount_ore).where(Inventory.user == user_id & Inventory.ore == ore_id))
+        ore_id = (await get_ore(name_ore)).id #получение айди по имени руды
+        await session.execute(update(Inventory).values(ammount_ore=Inventory.ammount_ore + amount_ore).where(Inventory.user == user_id, Inventory.ore == ore_id))
         await session.commit()
 
 
@@ -87,7 +87,8 @@ async def limit_user(user_id: int, amount: int):
 async def reset_ammoint_ore(user_id: int, ore_name: int):
     """СБРАСЫВАЕТ КОЛВО РУДЫ ПРИ ПРОДАЖЕ"""
     async with async_session() as session:
-        await session.execute(update(Inventory).values(ammount_ore = 0).where((Inventory.user == await get_user_id(user_id)) & (Inventory.ore == await get_ore_id(ore_name))))
+        await session.execute(update(Inventory).values(ammount_ore = 0).where((Inventory.user == await get_user_id(user_id)) & (Inventory.ore == (await get_ore(ore_name)).id)))
+        await session.commit()
 
         
 async def get_transferred(user_id: int, amount):

@@ -49,7 +49,7 @@ async def get_ores():
 async def get_user_ore_count(user_id: int, ore_name: str):
     """ПОЛУЧЕНИЕ КОЛВА ОПРЕДЕЛЕННОЙ РУДЫ У ПОЛЬЗОВАТЕЛЯ"""
     async with async_session() as session:
-        return (await session.scalar(select(Inventory).where((Inventory.user == await get_user_id(user_id)) & (Inventory.ore == await get_ore_id(ore_name))))).ammount_ore
+        return (await session.scalar(select(Inventory).where((Inventory.user == await get_user_id(user_id)) & (Inventory.ore == (await get_ore(ore_name)).id)))).ammount_ore
 
 
 async def get_ore(ore_name: str):
@@ -64,7 +64,7 @@ async def get_ore_by_id(id_: int):
         return await session.scalar(select(Ore).where(Ore.id == id_))
 
 
-async def get_ore_id(ore: str) -> int:
-    """ПОЛУЧЕНИЕ АЙДИ АЙДИ РУДЫ ПО ИМЕНИ"""
-    async with async_session() as session:
-        return (await session.scalar(select(Ore).where(Ore.ore == ore))).id
+# async def get_ore_id(ore: str) -> int:
+#     """ПОЛУЧЕНИЕ АЙДИ АЙДИ РУДЫ ПО ИМЕНИ"""
+#     async with async_session() as session:
+#         return (await session.scalar(select(Ore).where(Ore.ore == ore))).id

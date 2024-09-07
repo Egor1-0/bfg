@@ -3,7 +3,7 @@ from aiogram import Router, F
 from aiogram.types import Message
 
 
-from app.database.queries import increanse_ores, deincreanse_energy, get_user_characteristic, get_ores, update_user_experience
+from app.database.queries import increanse_ores, deincreanse_energy, get_user_characteristic, get_ore, update_user_experience
 from app.filters import CheckEnergy, CheckOres
 from app.src.ores_list import ore_icon, experience_ranges
 
@@ -22,10 +22,9 @@ async def ores_get(message: Message):
     
     user_characteristic = await get_user_characteristic(message.from_user.id)
     """ИСПРАВИТЬ ЭТО ГОВНО"""
-    ores = await get_ores()
-    ore_info = next((ore for ore in ores if ore.ore == ore_name), None)
+    ore = await get_ore(message.text.lower().split(' ')[1])
 
-    if user_characteristic.experience >= ore_info.experience: #проверка на то что у пользователя хватает опыта для добычи этой руды
+    if user_characteristic.experience >= ore.experience: #проверка на то что у пользователя хватает опыта для добычи этой руды
         min_exp, max_exp = experience_ranges.get(ore_name, (0, 0)) #получает границы опыта из срс
         earned_experience = random.randint(min_exp, max_exp)
 
@@ -40,5 +39,5 @@ async def ores_get(message: Message):
         )
     else:
         await message.answer(
-            f'❌ | У вас недостаточно опыта для добычи {ore_name}. \n⚠️ | Требуется {ore_info.experience} опыта.'
+            f'❌ | У вас недостаточно опыта для добычи {ore_name}. \n⚠️ | Требуется {ore.experience} опыта.'
         )
