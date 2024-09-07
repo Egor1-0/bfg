@@ -250,3 +250,14 @@ async def deincreanse_bank(tg_id: int, money_ammount: int):
                              .where(Bank.user == await get_user_id(tg_id)))
         # Commit the changes
         await session.commit()
+
+async def update_coffers_status(user_id: int, status: bool):
+    """
+    Обновляет статус ограбления казны для пользователя.
+    """
+    async with async_session() as session:
+        # Обновляем поле coffers в таблице User
+        await session.execute(
+            update(User).values(coffers=status).where(User.id == await get_user_id(user_id))
+        )
+        await session.commit()

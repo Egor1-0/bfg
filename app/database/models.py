@@ -1,7 +1,7 @@
 import enum
 from datetime import datetime
 
-from sqlalchemy import String, BigInteger, DateTime, Integer, ForeignKey, Float
+from sqlalchemy import String, BigInteger, DateTime, Integer, ForeignKey, Float, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
@@ -25,6 +25,7 @@ class User(Base):
     registered: Mapped[datetime] = mapped_column(DateTime, default=datetime.now())
     limit: Mapped[int] = mapped_column(BigInteger, default=300000000000000) #лимит переводов
     transferred: Mapped[int] = mapped_column(BigInteger, default=0) #сколько перевел
+    coffers: Mapped[bool] = mapped_column(Boolean, default=False)
 
 class Finance(Base):
     __tablename__ = 'finances'

@@ -1,0 +1,1 @@
+from app.handlers.coffers.coffers_handlers import coffers_router
