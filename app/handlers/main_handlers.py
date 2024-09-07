@@ -45,7 +45,7 @@ async def user_inventory(message: Message):
 
     await message.answer(f"📥 Ваш инвентарь:\n" + "\n".join(inventory_text))
 
-
+    
 @main_router.message(Command("help"))
 @main_router.message(F.text.lower() == "помощь")
 async def help(message: Message):

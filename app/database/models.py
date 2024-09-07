@@ -80,3 +80,46 @@ class Property(Base):
     price: Mapped[int] = mapped_column(BigInteger)  # price
     description: Mapped[str] = mapped_column(String(255))  # description
     photo: Mapped[str] = mapped_column(String(100), default="pass")  # photo link
+
+
+class Bank(Base):
+    """
+    Model for banks
+
+    :param id: unique identifier
+    :param user: user id
+    :param money_ammount: money ammount
+    :param percent: percent of money
+    :param comission: comission of money
+    """
+    __tablename__ = 'banks'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user: Mapped[int] = mapped_column(BigInteger, ForeignKey(User.id))
+    money_ammount: Mapped[int] = mapped_column(BigInteger)
+    percent: Mapped[int] = mapped_column(Integer, default=6)
+    comission: Mapped[int] = mapped_column(Integer, default=1)
+
+
+"""
+async with async_session() as session:
+    existing_ores = await session.execute(select(Ore).limit(1))
+    if existing_ores.scalars().first() is not None:  # check if properties already exist
+        return
+
+    session.add_all([
+        Property(name= , price= , description= , photo= ),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property()
+    ])
+    await session.commit()
+"""
