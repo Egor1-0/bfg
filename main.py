@@ -6,10 +6,15 @@ from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 
 
+from aiogram_dialog import setup_dialogs
+
+
 from app.database.queries import push_ore, push_car
 from app.database.session import create_session
 from app.handlers import main_router_
+from app.handlers.shop.buy.buy import buy_router
 from app.middlewares import CheckUser
+from app.dialog import dialog_router
 
 
 load_dotenv()
@@ -32,8 +37,10 @@ async def main():
     bot = Bot(token=os.getenv("TOKEN")) 
     dp = Dispatcher()
 
-    dp.include_routers(main_router_)
+    dp.include_routers(main_router_, dialog_router)
     dp.message.outer_middleware(CheckUser())
+    
+    setup_dialogs(dp)
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 

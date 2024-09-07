@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from app.database.models import User, Finance, Characteristic, Inventory, Ore, Bank
+from app.database.models import User, Finance, Characteristic, Inventory, Ore, Bank, Property
 from app.database.session import async_session
 
 async def get_user(user_id: int):
@@ -69,6 +69,17 @@ async def get_bank(user_tg_id: int):
     async with async_session() as session:
         return await session.scalar(select(Bank).where(Bank.user == await get_user_id(user_tg_id)))
     
+
+async def get_property_all():
+    """ПОЛУЧЕНИЕ ИМУЩЕСТВА"""
+    async with async_session() as session:
+        return await session.scalars(select(Property))
+    
+
+async def get_property_by_id(id_: int):
+    """ПОЛУЧЕНИЕ ИМУЩЕСТВА"""
+    async with async_session() as session:
+        return await session.scalar(select(Property).where(Property.id == id_))
 
 # async def get_ore_id(ore: str) -> int:
 #     """ПОЛУЧЕНИЕ АЙДИ АЙДИ РУДЫ ПО ИМЕНИ"""

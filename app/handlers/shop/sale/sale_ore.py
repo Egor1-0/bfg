@@ -20,6 +20,6 @@ async def sale(message: Message):
     
 
 @sale_router.message(~CheckOres())
-async def sale(message: Message):
+async def not_sale(message: Message):
     await message.answer("Неправильно введена руда")
 

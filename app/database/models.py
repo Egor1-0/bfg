@@ -77,7 +77,7 @@ class Property(Base):
     __tablename__ = 'properties'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(35))  # name
+    name: Mapped[str] = mapped_column(String(35), unique=True)  # name
     price: Mapped[int] = mapped_column(BigInteger)  # price
     description: Mapped[str] = mapped_column(String(255))  # description
     photo: Mapped[str] = mapped_column(String(100), default="pass")  # photo link
