@@ -1,22 +1,31 @@
 from aiogram import Router, F
 from aiogram.types import Message
-from aiogram.filters import or_f
 
-from app.filters import LenInputData, DateValue
-from app.database.queries import increanse, deincreanse, limit_user, get_user, push_transferred
-from app.filters import CheckMoney, CheckLimit
+from app.database.queries import increanse_bank, deincreanse, increanse, deincreanse_bank, get_bank
+from app.filters import CheckBankMoney
 
 bank_router = Router()
 
 
 bank_router.message.filter(F.text.lower().startswith('банк'))
 
-# bank_router.message.filter(CheckMoney())
+bank_router.message.filter(CheckBankMoney())
 # bank_router.message.filter(CheckLimit())
 
-@bank_router.message(F.text.lower().startswith('банк'))
+@bank_router.message(F.text.lower().contains('положить'))
 async def error(message: Message):
-    await message.answer('Необходимо ввести сумму: целое число больше 10')
+    await increanse_bank(message.from_user.id, int(message.text.split(" ")[2]))
+    await deincreanse(int(message.text.split(" ")[2]), message.from_user.id)
+    await message.answer("Положено в банк")
+
+
+@bank_router.message(F.text.lower().contains('снять'))
+async def error(message: Message):
+    bank_comission = (await get_bank(message.from_user.id)).comission 
+    await deincreanse_bank(message.from_user.id, int(message.text.split(" ")[2]))
+    await increanse(int(message.text.split(" ")[2]) * (100 - bank_comission) / 100, 
+                    message.from_user.id)
+    await message.answer("Положено в вам на счет")
 
 
 # @bank_router.message(LenInputData(), DateValue())

@@ -148,6 +148,7 @@ async def push_user(user_id: int):
         await session.commit()
         session.add(Finance(user=await get_user_id(user_id)))#пуш финансов и тд
         session.add(Characteristic(user=await get_user_id(user_id)))
+        session.add(Bank(user=await get_user_id(user_id)))
         for ore in await get_ores(): #проходит по всем рудам и добавляет в инвентарь
             session.add(Inventory(user=await get_user_id(user_id), ore = ore.id))
         await session.commit()
@@ -210,8 +211,42 @@ async def push_transferred(user_id: int, amount):
         await session.commit()
 
 
-async def push_bank(tg_id: int, money_ammount: int):
-    """СОЗДАЕТ НОВЫЙ БАНК С ПАРАМЕТРАМИ ТГ АЙДИ И СУММЫ ДЕНЕГ"""
+async def increanse_bank(tg_id: int, money_ammount: int):
+    """
+    Updates bank balance of a user with tg_id by adding money_ammount to it
+
+    Args:
+        tg_id (int): Telegram ID of the user
+        money_ammount (int): Amount of money to add to the balance
+
+    Returns:
+        None
+    """
     async with async_session() as session:
-        session.add(Bank(user=await get_user_id(tg_id), money_ammount=money_ammount))
+        # Update bank balance by adding money_ammount to it
+        await session.execute(update(Bank)
+                             .values(money_ammount=Bank.money_ammount + money_ammount)
+                             .where(Bank.user == await get_user_id(tg_id)))
+        # Commit the changes
+        await session.commit()
+
+async def deincreanse_bank(tg_id: int, money_ammount: int):
+    """
+    Decreases bank balance of a user with tg_id by subtracting money_ammount from it
+
+    Args:
+        tg_id (int): Telegram ID of the user
+        money_ammount (int): Amount of money to subtract from the balance
+
+    Returns:
+        None
+    """
+    async with async_session() as session:
+        # Update bank balance by subtracting money_ammount from it
+        # We subtract money_ammount because we want to decrease the balance
+        await session.execute(update(Bank)
+                             .values(money_ammount=Bank.money_ammount - money_ammount)
+                             # We update the Bank row where user if is equal to the user id
+                             .where(Bank.user == await get_user_id(tg_id)))
+        # Commit the changes
         await session.commit()
