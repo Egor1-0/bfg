@@ -62,3 +62,65 @@ class Inventory(Base):
     user: Mapped[int] = mapped_column(BigInteger, ForeignKey(User.id))
     ore: Mapped[str] = mapped_column(String(20), ForeignKey(Ore.id)) #айди руды
     ammount_ore: Mapped[int] = mapped_column(BigInteger, default=0) #колво этой руды у пользователя
+
+
+class Property(Base):
+    """
+    Model for possible property
+
+    :param id: unique identifier
+    :param name: property name
+    :param price: property price
+    :param description: property description
+    :param photo: link to property photo
+    """
+    __tablename__ = 'properties'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(35))  # name
+    price: Mapped[int] = mapped_column(BigInteger)  # price
+    description: Mapped[str] = mapped_column(String(255))  # description
+    photo: Mapped[str] = mapped_column(String(100), default=None)  # photo link
+
+
+class Bank(Base):
+    """
+    Model for banks
+
+    :param id: unique identifier
+    :param user: user id
+    :param money_ammount: money ammount
+    :param percent: percent of money
+    :param comission: comission of money
+    """
+    __tablename__ = 'banks'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user: Mapped[int] = mapped_column(BigInteger, ForeignKey(User.id))
+    money_ammount: Mapped[int] = mapped_column(BigInteger)
+    percent: Mapped[int] = mapped_column(Integer, default=6)
+    comission: Mapped[int] = mapped_column(Integer, default=1)
+
+
+"""
+async with async_session() as session:
+    existing_ores = await session.execute(select(Ore).limit(1))
+    if existing_ores.scalars().first() is not None:  # check if properties already exist
+        return
+
+    session.add_all([
+        Property(name= , price= , description= , photo= ),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property(),
+        Property()
+    ])
+    await session.commit()
+"""

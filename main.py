@@ -15,6 +15,16 @@ from app.middlewares import CheckUser
 load_dotenv()
 
 async def main():
+    """
+    Главная функция - точка входа бота.
+    Здесь происходит инициализация сессии,
+    отправка запросов на создание руд,
+    создание бота,
+    привязка роутера,
+    привязка middleware,
+    удаление вебхука,
+    запуск поллинга.
+    """
     await create_session()
     await push_ore()
     bot = Bot(token=os.getenv("TOKEN")) 

@@ -3,7 +3,7 @@ from aiogram.types import Message
 from aiogram.filters import or_f
 
 from app.filters import LenInputData, DateValue
-from app.database.queries import increanse, deincreanse, limit_user, get_user, get_transferred
+from app.database.queries import increanse, deincreanse, limit_user, get_user, push_transferred
 from app.filters import CheckMoney, CheckLimit
 
 gift_router_enough = Router()
@@ -30,7 +30,7 @@ async def give_money_handler(message: Message):
         await increanse(amount, message.reply_to_message.from_user.id)
         await deincreanse(amount, message.from_user.id)
         await limit_user(message.from_user.id, amount)
-        await get_transferred(message.from_user.id, amount)
+        await push_transferred(message.from_user.id, amount)
         await message.reply_to_message.answer(
             f"✅ | {amount} успешно передано пользователю {message.reply_to_message.from_user.full_name}!"
         )

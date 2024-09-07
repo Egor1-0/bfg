@@ -7,9 +7,8 @@ from app.filters import CheckOres
 sale_router = Router()
 
 sale_router.message.filter(F.text.lower().startswith("продать"))
-sale_router.message.filter(CheckOres())
 
-@sale_router.message()
+@sale_router.message(CheckOres())
 async def sale(message: Message):
     ore_name = message.text.lower().split(' ')[1]
     ore_price = (await get_ore(ore_name)).price
@@ -19,4 +18,8 @@ async def sale(message: Message):
     await reset_ammoint_ore(user, ore_name)
     await message.answer((f"Вы получили {ore_price * ammount_ore}"))
     
+
+@sale_router.message(~CheckOres())
+async def sale(message: Message):
+    await message.answer("Неправильно введена руда")
 

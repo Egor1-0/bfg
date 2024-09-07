@@ -1,15 +1,18 @@
 from sqlalchemy import update, select
 
-from app.database.models import User, Finance, Characteristic, Ore, Inventory
+from app.database.models import User, Finance, Characteristic, Ore, Inventory, Bank
 from app.database.session import async_session
 from app.database.queries import get_ores, get_user_id, get_ore
 
+async def push_ore() -> None:
+    """
+    Push all ores into the database if they don't exist yet.
 
-async def push_ore():
-    """ОТПРАВЛЯЕТ ВСЕ РУДЫ В БД ЕСЛИ ИХ ЕЩЕ НЕТ"""
+    This function takes no arguments and returns None.
+    """
     async with async_session() as session:
         existing_ores = await session.execute(select(Ore).limit(1))
-        if existing_ores.scalars().first() is not None: #проверка на наличие
+        if existing_ores.scalars().first() is not None:  # check if ores already exist
             return
 
         session.add_all([
@@ -91,8 +94,15 @@ async def reset_ammoint_ore(user_id: int, ore_name: int):
         await session.commit()
 
         
-async def get_transferred(user_id: int, amount):
+async def push_transferred(user_id: int, amount):
     """ОБНОВЯЛЕТ КОЛВО ПЕРЕВОДОВ ЗА МЕСЯЦ"""
     async with async_session() as session:
         await session.execute(update(User).values(transferred=User.transferred + amount).where(User.id == await get_user_id(user_id)))
+        await session.commit()
+
+
+async def push_bank(tg_id: int, money_ammount: int):
+    """СОЗДАЕТ НОВЫЙ БАНК С ПАРАМЕТРАМИ ТГ АЙДИ И СУММЫ ДЕНЕГ"""
+    async with async_session() as session:
+        session.add(Bank(user=await get_user_id(tg_id), money_ammount=money_ammount))
         await session.commit()

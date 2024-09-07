@@ -45,11 +45,11 @@ async def user_inventory(message: Message):
 
     await message.answer(f"Ваш инвентарь:\n" + "\n".join(inventory_text))
 
-
+    
 @main_router.message(Command("help"))
 @main_router.message(F.text.lower() == "помощь")
 async def help(message: Message):
-    await message.answer(f"{message.from_user.first_name}", 
+    await message.answer(f"{message.from_user.first_name}"
                         f'Меня зовут BFG, твой верный игровой бот.'
                         f'У меня есть множество интересных команд и игр, чтобы'
                         f'скрасить твоё время, будь ты один или в компании друзей!'
