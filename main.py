@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher
 
 
-from app.database.queries import push_ore
+from app.database.queries import push_ore, push_car
 from app.database.session import create_session
 from app.handlers import main_router_
 from app.middlewares import CheckUser
@@ -14,9 +14,11 @@ from app.middlewares import CheckUser
 
 load_dotenv()
 
+
 async def main():
     await create_session()
     await push_ore()
+    await push_car()
     bot = Bot(token=os.getenv("TOKEN")) 
     dp = Dispatcher()
 

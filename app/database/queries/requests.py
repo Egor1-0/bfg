@@ -68,3 +68,4 @@ async def get_ore_by_id(id_: int):
 #     """ПОЛУЧЕНИЕ АЙДИ АЙДИ РУДЫ ПО ИМЕНИ"""
 #     async with async_session() as session:
 #         return (await session.scalar(select(Ore).where(Ore.ore == ore))).id
+

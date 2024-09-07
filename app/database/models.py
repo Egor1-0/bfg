@@ -1,7 +1,7 @@
 import enum
 from datetime import datetime
 
-from sqlalchemy import String, BigInteger, DateTime, Integer, ForeignKey
+from sqlalchemy import String, BigInteger, DateTime, Integer, ForeignKey, Float
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
@@ -62,3 +62,21 @@ class Inventory(Base):
     user: Mapped[int] = mapped_column(BigInteger, ForeignKey(User.id))
     ore: Mapped[str] = mapped_column(String(20), ForeignKey(Ore.id)) #айди руды
     ammount_ore: Mapped[int] = mapped_column(BigInteger, default=0) #колво этой руды у пользователя
+
+class Property(Base):
+    """
+    Model for possible property
+
+    :param id: unique identifier
+    :param name: property name
+    :param price: property price
+    :param description: property description
+    :param photo: link to property photo
+    """
+    __tablename__ = 'properties'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(35))  # name
+    price: Mapped[int] = mapped_column(BigInteger)  # price
+    description: Mapped[str] = mapped_column(String(255))  # description
+    photo: Mapped[str] = mapped_column(String(100), default=None)  # photo link
