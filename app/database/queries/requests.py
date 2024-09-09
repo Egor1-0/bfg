@@ -71,9 +71,11 @@ async def get_bank(user_tg_id: int):
     
 
 async def get_property_all():
-    """ПОЛУЧЕНИЕ ИМУЩЕСТВА"""
+    """Получение всех автомобилей"""
     async with async_session() as session:
-        return await session.scalars(select(Property))
+        result = await session.scalars(select(Property))
+        return result.all()  # Преобразование ScalarResult в список
+
     
 
 async def get_property_by_id(id_: int):
@@ -81,8 +83,16 @@ async def get_property_by_id(id_: int):
     async with async_session() as session:
         return await session.scalar(select(Property).where(Property.id == id_))
 
+def paginate(items, page, per_page):
+    """Разделение списка элементов на страницы"""
+    start = (page - 1) * per_page
+    end = start + per_page
+    return items[start:end]
+
 # async def get_ore_id(ore: str) -> int:
 #     """ПОЛУЧЕНИЕ АЙДИ АЙДИ РУДЫ ПО ИМЕНИ"""
 #     async with async_session() as session:
 #         return (await session.scalar(select(Ore).where(Ore.ore == ore))).id
+
+
 
