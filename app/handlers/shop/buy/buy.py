@@ -2,70 +2,49 @@ from aiogram import F, Router
 from aiogram.types import Message, CallbackQuery
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app.states.states import MainMenu
-from app.keyboards.kb_shops import create_main_shop_keyboard
+from app.keyboards.kb_shops import create_main_shop_keyboard, create_pagination_keyboard
 from app.database.queries.requests import get_property_all
 
 buy_router = Router()
 
-ITEMS_PER_PAGE = 5
-
-def create_pagination_keyboard(items, page, user_id):
-    builder = InlineKeyboardBuilder()
-
-    start_index = page * ITEMS_PER_PAGE
-    end_index = min(start_index + ITEMS_PER_PAGE, len(items))
-
-    # Добавляем кнопки автомобилей в вертикальный столбец
-    for item in items[start_index:end_index]:
-        builder.button(text=item.name, callback_data=f"car_{item.id}_{user_id}")
-        builder.adjust(1)  # Выравнивание кнопок автомобилей в столбик
-
-    # Создаем клавиатуру для навигационных кнопок
-    navigation_builder = InlineKeyboardBuilder()
-
-    # Добавляем кнопки навигации
-    if page > 0:
-        navigation_builder.button(text="⬅️", callback_data=f"page_{page - 1}_{user_id}")
-    navigation_builder.button(text="Меню", callback_data=f"menu_{user_id}")
-    if end_index < len(items):
-        navigation_builder.button(text="➡️", callback_data=f"page_{page + 1}_{user_id}")
-
-    # Выравнивание навигационных кнопок в одну строку
-    navigation_builder.adjust(3)
-
-    # Добавляем навигационные кнопки на отдельной строке после кнопок автомобилей
-    builder.row(*navigation_builder.buttons)  # Добавляем навигационные кнопки отдельно
-    return builder
 
 @buy_router.message(F.text.lower().startswith("магазин"))
 async def category_shop(message: Message):
     keyboard = create_main_shop_keyboard(message.from_user.id)
     await message.answer('📦 Выберите категорию:', reply_markup=keyboard.as_markup())
 
+async def send_page(callback_query: CallbackQuery, page: int, category: str):
+    properties = await get_property_all()  # Получаем список всех свойств
+    user_id = callback_query.from_user.id
+    keyboard = create_pagination_keyboard(properties, page, user_id, category)
+    await callback_query.message.edit_text(f'🛍 Выберите товар:', reply_markup=keyboard.as_markup())
+
 @buy_router.callback_query(F.data.startswith("cars_"))
-async def show_cars(callback_query: CallbackQuery):
-    user_id = int(callback_query.data.split("_")[1])  # Исправление парсинга user_id
+@buy_router.callback_query(F.data.startswith("real_estate_"))
+@buy_router.callback_query(F.data.startswith("gadgets_"))
+@buy_router.callback_query(F.data.startswith("aircraft_"))
+@buy_router.callback_query(F.data.startswith("yachts_"))
+@buy_router.callback_query(F.data.startswith("helicopters_"))
+async def show_items(callback_query: CallbackQuery):
+    data = callback_query.data.split("_")
+    category = data[0]  # category like "cars", "real_estate", etc.
+    user_id = int(data[1])
 
     if callback_query.from_user.id == user_id:
         page = 0  # Начинаем с первой страницы
-        await send_car_page(callback_query, page)  # Передаем callback_query вместо message
+        await send_page(callback_query, page, category)  # Передаем callback_query вместо message
     else:
         await callback_query.answer('Это кнопка не для вас', show_alert=True)
-
-async def send_car_page(callback_query: CallbackQuery, page: int):
-    properties = await get_property_all()  # Получаем список автомобилей
-    user_id = callback_query.from_user.id
-    keyboard = create_pagination_keyboard(properties, page, user_id)
-    await callback_query.message.edit_text('🚗 Выберите машину:', reply_markup=keyboard.as_markup())
 
 @buy_router.callback_query(F.data.startswith("page_"))
 async def handle_pagination(callback_query: CallbackQuery):
     data = callback_query.data.split("_")
     page = int(data[1])
-    user_id = int(data[2])  # Исправление парсинга user_id
+    user_id = int(data[2])
+    category = data[3]  # category should be included in pagination
 
     if callback_query.from_user.id == user_id:
-        await send_car_page(callback_query, page)
+        await send_page(callback_query, page, category)
     else:
         await callback_query.answer('Это кнопка не для вас', show_alert=True)
 

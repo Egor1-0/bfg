@@ -81,6 +81,8 @@ class Property(Base):
     price: Mapped[int] = mapped_column(BigInteger)  # price
     description: Mapped[str] = mapped_column(String(255))  # description
     photo: Mapped[str] = mapped_column(String(100), default="pass")  # photo link
+    category: Mapped[str] = mapped_column(String(20), default=None)
+
 
 
 class Bank(Base):
