@@ -15,7 +15,7 @@ from app.handlers import main_router_
 from app.handlers.shop.buy.buy import buy_router
 from app.middlewares import CheckUser
 from app.dialog import dialog_router
-    
+
 
 load_dotenv()
 
@@ -51,5 +51,3 @@ if __name__ == '__main__':
         asyncio.run(main())
     except KeyboardInterrupt:
         pass
-
-
