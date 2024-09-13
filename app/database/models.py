@@ -79,9 +79,11 @@ class Property(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(35), unique=True)  # name
     price: Mapped[int] = mapped_column(BigInteger)  # price
-    description: Mapped[str] = mapped_column(String(255))  # description
+    max_speed: Mapped[int] = mapped_column(BigInteger, default="pass")
+    horsepower: Mapped[int] = mapped_column(BigInteger, default="pass")
+    overclocking: Mapped[int] = mapped_column(BigInteger, default="pass")
     photo: Mapped[str] = mapped_column(String(100), default="pass")  # photo link
-    category: Mapped[str] = mapped_column(String(20), default=None)
+    category: Mapped[int] = mapped_column(Integer, default=None)
 
 
 

@@ -4,27 +4,30 @@ from aiogram.filters.callback_data import CallbackData
 
 ITEMS_PER_PAGE = 5
 
+# Mapping categories to integers
+CATEGORIES = {
+    1: "🚗 Машины",
+    2: "🏠 Недвижимость",
+    3: "📱 Гаджеты",
+    4: "✈️ Самолеты",
+    5: "🛥 Яхты",
+    6: "🚁 Вертолеты",
+}
 
+# Reverse mapping for displaying categories based on integers
+CATEGORIES_REVERSE = {v: k for k, v in CATEGORIES.items()}
 
 def create_main_shop_keyboard(user_id: int):
     builder = InlineKeyboardBuilder()
-    categories = [
-        ("🚗 Машины", "cars"),
-        ("🏠 Недвижимость", "real_estate"),
-        ("📱 Гаджеты", "gadgets"),
-        ("✈️ Самолеты", "aircraft"),
-        ("🛥 Яхты", "yachts"),
-        ("🚁 Вертолеты", "helicopters"),
-    ]
 
-    for name, key in categories:
-        builder.button(text=name, callback_data=f"{key}_{user_id}")
+    for category_id, name in CATEGORIES.items():
+        builder.button(text=name, callback_data=f"{category_id}_{user_id}")
 
     builder.adjust(1)
     return builder
 
 
-def create_pagination_keyboard(items, page: int, user_id: int, category: str):
+def create_pagination_keyboard(items, page: int, user_id: int, category: int):
     builder = InlineKeyboardBuilder()
     filtered_items = [item for item in items if item.category == category]
 
@@ -35,7 +38,7 @@ def create_pagination_keyboard(items, page: int, user_id: int, category: str):
     for item in filtered_items[start_index:end_index]:
         builder.button(
             text=item.name,
-            callback_data=f"{category}_{user_id}_{item.id}"  # Убедитесь, что item.id используется корректно
+            callback_data=f"{category}_{user_id}_{item.id}"
         )
         builder.adjust(1)
 
@@ -51,3 +54,4 @@ def create_pagination_keyboard(items, page: int, user_id: int, category: str):
     builder.row(*navigation_builder.buttons)
 
     return builder
+

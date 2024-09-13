@@ -9,11 +9,12 @@ from app.handlers.shop.sale.sale_ore import sale_router
 from app.handlers.bank import bank_router
 from app.handlers.coffers import coffers_router
 from app.handlers.shop.buy.buy import buy_router
+from app.handlers.case.case import case_router
 
 main_router_ = Router()
 
 
-main_router_.include_routers(main_router, profile_router_, gift_router, ores_router_, sale_router, buy_router, bank_router, coffers_router, games_router)
+main_router_.include_routers(main_router, profile_router_, gift_router, ores_router_, sale_router, buy_router, bank_router, case_router, coffers_router, games_router)
 
 
 
